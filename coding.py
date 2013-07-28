@@ -2,29 +2,32 @@ __author__ = 'shengyinwu'
 
 import numpy as np
 
-def vlad_coding(X, B, Width, Height, Xs, Ys):
-    dSize = B.shape[0]
-    nSmp = X.shape[0]
-    feature_len = B.shape[1]
+""" Aggregating local descriptors into a compact image representation
+    Hervé Jégou, Matthijs Douze, Cordelia Schmid and Patrick Pérez
+    Proc. IEEE CVPR‘10, June, 2010.
+"""
 
-    img_width = Width
-    img_height = Height
+def vl_coding(data, codebook):
+    dictionary_size = codebook.shape[0]
+    feature_length = codebook.shape[1]
 
-    D = np.dot(X, B.T)
-    IDX = np.sort(D, axis = 1)
+    dot_product = np.dot(data, codebook.T)
+    codebook_indexes = np.sort(dot_product, axis = 1)
 
-    beta = np.zeros((1, feature_len * dSize), np.float)
-    count = np.zeros((1, dSize), np.int)
+    vlad_feature = np.zeros((1, feature_length * dictionary_size), np.float)
+    codebook_count = np.zeros((1, dictionary_size), np.int)
 
-    for idx in range(0, IDX.shape[0]):
-        index = IDX[idx, 0]
-        count[0, index] = count[0, index] + 1
-        beta[0, index * feature_len:(index+1) * feature_len] += X[idx, :] - B[index, :]
-    for index in range(0, dSize):
-        if count[0, index] == 0:
+    for idx in range(0, vl_codes.shape[0]):
+        codebook_index = codebook_indexes[idx]
+        codebook_count[0, codebook_index] = codebook_count[0, codebook_index] + 1
+        vlad_feature[0, codebook_index * feature_length:(codebook_index+1) * feature_length] += 
+        data[idx, :] - codebook_size[codebook_index, :]
+    for codebook_index in range(0, dictionary_size):
+        if codebook_count[0, codebook_index] == 0:
             continue
-        beta[0, index * feature_len:(index+1) * feature_len] /= count[0, index]
+        vlad_feature[0, codebook_index * feature_length:(codebook_index+1) * feature_length] /= 
+        codebook_count[0, codebook_index]
 
-    beta.shape = 1, -1
-    beta = beta / (np.linalg.norm(beta) + 1e-12)
-    return beta[0, :]
+    vlad_feature.shape = 1, -1
+    vlad_feature = vlad_feature / (np.linalg.norm(vlad_feature) + 1e-12)
+    return vlad_feature
