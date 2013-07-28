@@ -15,7 +15,6 @@ def vl_coding(data, codebook):
     codebook_indexes = np.sort(dot_product, axis = 1)
 
     vlad_feature = np.zeros((1, feature_length * dictionary_size), np.float)
-    codebook_count = np.zeros((1, dictionary_size), np.int)
 
     for codebook_index in range(0, dictionary_size):
         current_indexs = np.nonzero(codebook_indexes == codebook_index)[0]
