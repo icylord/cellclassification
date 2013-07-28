@@ -36,14 +36,12 @@ class BagOfVisualWords:
                 loaded_image = Image.open(png_file)
                 image_width = loaded_image.size[0]
                 image_height = loaded_image.size[1]
-                xs = keypoints[:, 0]
-                ys = keypoints[:, 1]
 
                 data_norm = np.sum(np.abs(data)**2, axis=-1)**(1./2) + 1e-12
                 tile_data_norm = np.tile(data_norm, (data.shape[1], 1))
                 data = data / tile_data_norm.T
                 fd_feature = file(os.path.join(self.bow_path, f), "wb")
-                fea = vl_coding(data, codebook, 3, 5, image_width, image_height, xs, ys)
+                fea = vl_coding(data, codebook)
                 np.save(fd_feature, fea)
 
 if __name__ == "__main__":
