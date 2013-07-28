@@ -50,8 +50,8 @@ if __name__ == "__main__":
     train_bag_of_visual_words = BagOfVisualWords(
         os.path.join("data", "images", "training"),
         os.path.join("data", "desc", "training_desc"),
-        os.path.join("data", "bow", "m_hv_train{0}".format(word)), word)
+        os.path.join("data", "bow", "vlad_train{0}".format(word)), word)
     test_bag_of_visual_words = BagOfVisualWords(
         os.path.join("data", "images", "test"),
         os.path.join("data", "desc", "test_desc"),
-        os.path.join("data", "bow", "m_hv_test{0}".format(word)), word)
+        os.path.join("data", "bow", "vlad_test{0}".format(word)), word)
