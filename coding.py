@@ -17,16 +17,14 @@ def vl_coding(data, codebook):
     vlad_feature = np.zeros((1, feature_length * dictionary_size), np.float)
     codebook_count = np.zeros((1, dictionary_size), np.int)
 
-    for idx in range(0, codebook_indexes.shape[0]):
-        codebook_index = codebook_indexes[idx]
-        codebook_count[0, codebook_index] = codebook_count[0, codebook_index] + 1
-        vlad_feature[0, codebook_index * feature_length:(codebook_index+1) * feature_length] += 
-        data[idx, :] - codebook_size[codebook_index, :]
     for codebook_index in range(0, dictionary_size):
-        if codebook_count[0, codebook_index] == 0:
+        current_indexs = np.nonzero(codebook_indexes == codebook_index)[0]
+        if current_indexs.shape[0] == 0:
             continue
-        vlad_feature[0, codebook_index * feature_length:(codebook_index+1) * feature_length] /= 
-        codebook_count[0, codebook_index]
+        current_centroid = codebook[current_indexs, :]
+        tile_centroid = np.tile(current_centroid, (current_indexs.shape[0], 1))
+        vlad_feature[0, current_indexs * feature_length:(current_indexs+1) * feature_length] = \
+            (data[current_indexs, :] - tile_centroid).sum(0) / current_indexs.shape[0]
 
     vlad_feature.shape = 1, -1
     vlad_feature = vlad_feature / (np.linalg.norm(vlad_feature) + 1e-12)
