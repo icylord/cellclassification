@@ -17,7 +17,7 @@ def vl_coding(data, codebook):
     vlad_feature = np.zeros((1, feature_length * dictionary_size), np.float)
     codebook_count = np.zeros((1, dictionary_size), np.int)
 
-    for idx in range(0, vl_codes.shape[0]):
+    for idx in range(0, codebook_indexes.shape[0]):
         codebook_index = codebook_indexes[idx]
         codebook_count[0, codebook_index] = codebook_count[0, codebook_index] + 1
         vlad_feature[0, codebook_index * feature_length:(codebook_index+1) * feature_length] += 
