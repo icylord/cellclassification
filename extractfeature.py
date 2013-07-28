@@ -26,12 +26,7 @@ class FeatureExtractor:
                 image_size = loaded_image.size
                 scale_width = image_size[0] / 150.0
                 scale_height = image_size[1] / 150.0
-                maxscale = -1
-
-                if scale_width > scale_height:
-                    maxscale = scale_width
-                else:
-                    maxscale = scale_height
+                maxscale = max(scale_width, scale_height)
                 resize_image = loaded_image.resize((int(image_size[0] / maxscale), int(image_size[1] / maxscale)))
 
                 png_path = os.path.join(self.image_dir, f[0:-4])
