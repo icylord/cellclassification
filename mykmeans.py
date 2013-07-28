@@ -21,7 +21,7 @@ class PerformKmeans():
             cls_path = os.path.join(self.desc_path, cls)
             all_files = os.listdir(cls_path)
 
-            feature_len = -1
+            feature_length = -1
             for f in all_files:
                 if f[-1] == "y":
                     npy_file = os.path.join(cls_path, f)
@@ -29,9 +29,9 @@ class PerformKmeans():
                     points = np.load(fd)
                     descriptors = np.load(fd)
                     total_descriptors += descriptors.shape[0]
-                    feature_len = descriptors.shape[1]
+                    feature_length = descriptors.shape[1]
 
-        self.descriptors = np.zeros((total_descriptors, feature_len), np.float)
+        self.descriptors = np.zeros((total_descriptors, feature_length), np.float)
         index = 0
         for cls in CLASSES_LIST:
             cls_path = os.path.join(self.desc_path, cls)
