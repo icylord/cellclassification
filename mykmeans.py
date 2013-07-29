@@ -4,12 +4,6 @@ import numpy as np
 import os
 from hkmeans import hkmeans
 
-CLASSES_LIST=['Asterionellopsis', 'Chaetoceros', 'ciliate','Cylindrotheca', 'DactFragCeratul', 'Dactyliosolen',
-                'detritus', 'Dinobryon', 'dinoflagellate', 'Ditylum', 'Euglena',
-                'Guinardia',  'Licmophora',  'nanoflagellate',  'other_lt20',
-                'pennate', 'Phaeocystis', 'Pleurosigma', 'Pseudonitzschia',
-                'Rhizosolenia', 'Skeletonema', 'Thalassiosira']
-
 class PerformKmeans():
     def __init__(self, words, desc_path):
         self.words = words
