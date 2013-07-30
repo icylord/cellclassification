@@ -1,57 +1,53 @@
 __author__ = 'ShengyinWu'
 
-import numpy as np
 import sys
-from sklearn import svm
-import cPickle
 import os
-import scipy.io as IO
-from sklearn import tree
+import numpy as np
+from sklearn import svm
 import evaluate_results
 
-CLASSES_DICT = {'homogeneous':1, 'coarse_speckled':2, 'fine_speckled':3, 'nucleolar':4, 'centromere':5, 'cytoplasmatic':6}
+class_dict = {'homogeneous':1, 'coarse_speckled':2, 'fine_speckled':3, 'nucleolar':4, 'centromere':5, 'cytoplasmatic':6}
 
-CLASSES_LIST=['homogeneous', 'coarse_speckled', 'fine_speckled', 'nucleolar', 'centromere', 'cytoplasmatic']
+class_list=['homogeneous', 'coarse_speckled', 'fine_speckled', 'nucleolar', 'centromere', 'cytoplasmatic']
 
 # evaluation and return confusion matrix
 def evaluation(data, cls, dec):
-    pred = dec.predict(data)
-    error = (pred != cls)
-    caters = []
+    predicted = dec.predict(data)
+    catergory = []
     aps = []
-    for k in CLASSES_LIST:
-        v = CLASSES_DICT[k]
-        clsind = (cls == v)
-        caters.append(k)
-        mask = (cls[clsind] == pred[clsind])
-        if clsind.sum(axis=0) == 0:
+    for cls in class_list:
+        v = class_dict[cls]
+        class_index = (cls == v)
+        catergory.append(cls)
+        mask = (cls[class_index] == predicted[class_index])
+        if class_index.sum(axis=0) == 0:
             continue
-        aps.append( float(sum(mask)) / float(clsind.sum(axis=0)))
-        print "{0} {1}".format(k, float(sum(mask)) / float(clsind.sum(axis=0)))
-    mask = (cls == pred)
+        aps.append( float(sum(mask)) / float(class_index.sum(axis=0)))
+        print "{0} {1}".format(cls, float(sum(mask)) / float(class_index.sum(axis=0)))
+    mask = (cls == predicted)
     print "Total {0}".format(float(sum(mask)) / float(cls.shape[0]))
     sys.stdout.flush()
 
-    conf_matrix = np.zeros((6, 6), np.float)
-    for k in CLASSES_LIST:
-        v = CLASSES_DICT[k]
+    confusion_matrix = np.zeros((6, 6), np.float)
+    for cls in class_list:
+        v = class_dict[cls]
         mask = (cls == v)
-        cater_vec = pred[mask]
+        cater_vec = predicted[mask]
         for i in range(cater_vec.shape[0]):
-            conf_matrix[int(v)-1, int(cater_vec[i])-1] += 1
+            confusion_matrix[int(v)-1, int(cater_vec[i])-1] += 1
 
     for i in range(6):
-        conf_matrix[i, :] = conf_matrix[i, :] / np.sum(conf_matrix[i, :])
-    print conf_matrix * 100
-    return conf_matrix
+        confusion_matrix[i, :] = confusion_matrix[i, :] / np.sum(confusion_matrix[i, :])
+    print confusion_matrix * 100
+    return confusion_matrix
 
 def main():
     word = 256
     fea_path = 128
-    bow_train_path = "data/bow/vlad_train{0}".format(word)
-    bow_test_path = "data/bow/vlad_test{0}".format(word)
+    bow_train_dir = "data/bow/vlad_train{0}".format(word)
+    bow_test_dir = "data/bow/vlad_test{0}".format(word)
 
-    files = os.listdir(bow_train_path)
+    files = os.listdir(bow_train_dir)
     n_trainsample = len(files)
     print "n_trainsample = {0}".format(n_trainsample)
 
@@ -64,11 +60,11 @@ def main():
     ind = 0
     for item in csv_file:
         f = "%03d.npy" %(int(item['id']))
-        npyname = os.path.join(bow_train_path, f)
-        fd = file(npyname, 'rb')
-        bowfeature = np.load(fd)
-        train_data[ind, :] = bowfeature
-        train_cls[ind] = int(CLASSES_DICT[item["pattern"]])
+        bow_file = os.path.join(bow_train_dir, f)
+        fd = file(bow_file, 'rb')
+        bow_feature = np.load(fd)
+        train_data[ind, :] = bow_feature
+        train_cls[ind] = int(class_dict[item["pattern"]])
         ind += 1
 
     clf = svm.LinearSVC(C=1)
@@ -76,7 +72,7 @@ def main():
     evaluation(train_data, train_cls, dec)
 
     ##### TEST #####
-    files = os.listdir(bow_test_path)
+    files = os.listdir(bow_test_dir)
     n_testsample = len(files)
     print "n_testsample = {0}".format(n_testsample)
 
@@ -89,11 +85,11 @@ def main():
     ind = 0
     for item in csv_file:
         f = "%03d.npy" %(int(item['id']))
-        npyname = os.path.join(bow_test_path, f)
-        fd = file(npyname, 'rb')
-        bowfeature = np.load(fd)
-        test_data[ind, :] = bowfeature
-        test_cls[ind] = int(CLASSES_DICT[item["pattern"]])
+        bow_file = os.path.join(bow_test_dir, f)
+        fd = file(bow_file, 'rb')
+        bow_feature = np.load(fd)
+        test_data[ind, :] = bow_feature
+        test_cls[ind] = int(class_dict[item["pattern"]])
         ind += 1
     conf_matrix = evaluation(test_data, test_cls, dec)
 
