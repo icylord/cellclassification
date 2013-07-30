@@ -7,16 +7,16 @@ import Image
 from coding import *
 
 class BOW:
-    def __init__(self, descriptor_dir, bow_dir, codebook):
+    def __init__(self, descriptor_dir, bow_dir, num_centers):
         self.descriptor_dir = descriptor_dir
         self.bow_dir = bow_dir
-        self.codebook = codebook
+        self.num_centers = num_centers
 
     def doBOW(self):
         if not os.path.exists(self.bow_dir):
             os.makedirs(self.bow_dir)
         files_in_dir = os.listdir(self.descriptor_dir)
-        codebook_file = os.path.join("data", "words", "[{0}].npy".format(self.codebook))
+        codebook_file = os.path.join("data", "words", "{0}.npy".format(self.num_centers))
         fd = file(codebook_file, "rb")
         codebook = np.load(fd)
         fd.close()
@@ -38,14 +38,14 @@ class BOW:
                 np.save(fd_feature, fea)
 
 def main():
-    word = 256
+    num_centers = 256
     train_bow = BOW(
         os.path.join("data", "desc", "training_desc"),
-        os.path.join("data", "bow", "vlad_train{0}".format(word)), word)
+        os.path.join("data", "bow", "vlad_train{0}".format(num_centers)), num_centers)
     train_bow.doBOW()
     test_bow = BOW(
         os.path.join("data", "desc", "test_desc"),
-        os.path.join("data", "bow", "vlad_test{0}".format(word)), word)
+        os.path.join("data", "bow", "vlad_test{0}".format(num_centers)), num_centers)
     test_bow.doBOW()
 
 if __name__ == "__main__":

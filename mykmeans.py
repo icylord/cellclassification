@@ -2,13 +2,14 @@ __author__ = 'ShengyinWu'
 
 import numpy as np
 import os
-from hkmeans import hkmeans
+from sklearn.cluster import KMeans
+from sklearn.cluster import MiniBatchKMeans
 
 class_list=['']
 
 class PerformKmeans():
-    def __init__(self, words, extracted_descriptor_dir):
-        self.words = np.array([words], np.int32)
+    def __init__(self, num_centers, extracted_descriptor_dir):
+        self.num_centers = num_centers
         self.descriptor_dir = extracted_descriptor_dir
 
     def loadData(self):
@@ -44,14 +45,16 @@ class PerformKmeans():
         norm_descriptors = np.sum(np.abs(self.descriptors)**2, axis=-1)**(1./2)
         tiled_norm_descriptors = np.tile(norm_descriptors, (self.descriptors.shape[1], 1))
         self.descriptors = self.descriptors / tiled_norm_descriptors.T
-        self.codebook = hkmeans(self.descriptors, self.words)
+        km = MiniBatchKMeans(n_clusters = self.num_centers, init='k-means++', batch_size = self.num_centers * 8,
+                             verbose = 1, compute_labels = False)
+        self.codebook = km.fit(self.descriptors)
 
     def saveCodebook(self):
         codebook_dir = os.path.join("data", "words")
         if not os.path.exists(codebook_dir):
             os.makedirs(codebook_dir)
-        saved_words_file = os.path.join(codebook_dir, "{0}.npy".format(self.words))
-        fd = file(saved_words_file, "wb")
+        saved_codebook_file = os.path.join(codebook_dir, "{0}.npy".format(self.num_centers))
+        fd = file(saved_codebook_file, "wb")
         np.save(fd, self.codebook)
 
 def main():
