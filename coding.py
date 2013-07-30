@@ -2,7 +2,7 @@ __author__ = 'shengyinwu'
 
 import numpy as np
 
-def vl_coding(data, codebook):
+def vlad_coding(data, codebook):
     dictionary_size = codebook.shape[0]
     feature_length = codebook.shape[1]
 
