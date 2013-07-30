@@ -2,6 +2,12 @@ __author__ = 'shengyinwu'
 
 import numpy as np
 
+"""
+Aggregating local descriptors into a compact image representation
+Hervé Jégou, Matthijs Douze, Cordelia Schmid and Patrick Pérez
+Proc. IEEE CVPR‘10, June, 2010.
+"""
+
 def vlad_coding(data, codebook):
     dictionary_size = codebook.shape[0]
     feature_length = codebook.shape[1]
