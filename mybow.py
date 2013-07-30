@@ -15,12 +15,10 @@ class BOW:
     def doBOW(self):
         if not os.path.exists(self.bow_dir):
             os.makedirs(self.bow_dir)
-        files_in_dir = os.listdir(self.descriptor_dir)
-        codebook_file = os.path.join("data", "words", "{0}.npy".format(self.num_centers))
-        fd = file(codebook_file, "rb")
+        fd = file(os.path.join("data", "words", "{0}.npy".format(self.num_centers)), "rb")
         codebook = np.load(fd)
         fd.close()
-        for f in files_in_dir:
+        for f in os.listdir(self.descriptor_dir):
             print f
             if f[-1] == "y":
                 npy_file = os.path.join(self.descriptor_dir, f)
@@ -30,12 +28,10 @@ class BOW:
                 fd = file(npy_file)
                 descriptors = np.load(fd)
 
-                data_norm = np.sum(np.abs(descriptors)**2, axis=-1)**(1./2) + 1e-12
-                tile_data_norm = np.tile(data_norm, (descriptors.shape[1], 1))
-                descriptors = descriptors / tile_data_norm.T
+                tile_data_norm = np.tile(np.sum(np.abs(descriptors)**2, axis=-1)**(1./2) + 1e-12,
+                                         (descriptors.shape[1], 1))
                 fd_feature = file(os.path.join(self.bow_dir, f), "wb")
-                fea = vlad_coding(descriptors, codebook)
-                np.save(fd_feature, fea)
+                np.save(fd_feature, vlad_coding(descriptors / tile_data_norm.T, codebook))
 
 def main():
     num_centers = 256

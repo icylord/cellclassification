@@ -47,7 +47,8 @@ class PerformKmeans():
         self.descriptors = self.descriptors / tiled_norm_descriptors.T
         km = MiniBatchKMeans(n_clusters = self.num_centers, init='k-means++', batch_size = self.num_centers * 8,
                              verbose = 1, compute_labels = False)
-        self.codebook = km.fit(self.descriptors)
+        km.fit(self.descriptors)
+        self.codebook = km.cluster_centers_
 
     def saveCodebook(self):
         codebook_dir = os.path.join("data", "words")

@@ -26,8 +26,7 @@ class FeatureExtractor:
                 exec_command = "{0} {1} {2} {3}".format(colordescriptor_exe, image_name, colordescriptor_params, temp_bin)
                 os.system(exec_command)
                 keypoints, descriptors = DescriptorIO.readDescriptors(temp_bin)
-                extracted_feature_name = os.path.join(self.extracted_descriptor_dir, f[0:-4] + ".npy")
-                fd = file(extracted_feature_name, "wb")
+                fd = file(os.path.join(self.extracted_descriptor_dir, f[0:-4] + ".npy"), "wb")
                 np.save(fd, descriptors)
                 np.save(fd, keypoints)
 
