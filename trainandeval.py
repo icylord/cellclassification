@@ -6,17 +6,17 @@ import numpy as np
 from sklearn import svm
 import evaluate_results
 
-CLASSES_DICT = {'homogeneous':1, 'coarse_speckled':2, 'fine_speckled':3, 'nucleolar':4, 'centromere':5, 'cytoplasmatic':6}
+class_dict = {'homogeneous':1, 'coarse_speckled':2, 'fine_speckled':3, 'nucleolar':4, 'centromere':5, 'cytoplasmatic':6}
 
-CLASSES_LIST=['homogeneous', 'coarse_speckled', 'fine_speckled', 'nucleolar', 'centromere', 'cytoplasmatic']
+class_list=['homogeneous', 'coarse_speckled', 'fine_speckled', 'nucleolar', 'centromere', 'cytoplasmatic']
 
 # evaluation and return confusion matrix
 def evaluation(data, cls, dec):
     pred = dec.predict(data)
     caters = []
     aps = []
-    for k in CLASSES_LIST:
-        v = CLASSES_DICT[k]
+    for k in class_list:
+        v = class_dict[k]
         clsind = (cls == v)
         caters.append(k)
         mask = (cls[clsind] == pred[clsind])
@@ -29,8 +29,8 @@ def evaluation(data, cls, dec):
     sys.stdout.flush()
 
     conf_matrix = np.zeros((6, 6), np.float)
-    for k in CLASSES_LIST:
-        v = CLASSES_DICT[k]
+    for k in class_list:
+        v = class_dict[k]
         mask = (cls == v)
         cater_vec = pred[mask]
         for i in range(cater_vec.shape[0]):
@@ -63,7 +63,7 @@ def main():
         fd = file(npyname, 'rb')
         bowfeature = np.load(fd)
         train_data[ind, :] = bowfeature
-        train_cls[ind] = int(CLASSES_DICT[item["pattern"]])
+        train_cls[ind] = int(class_dict[item["pattern"]])
         ind += 1
 
     clf = svm.LinearSVC(C=1)
@@ -88,7 +88,7 @@ def main():
         fd = file(npyname, 'rb')
         bowfeature = np.load(fd)
         test_data[ind, :] = bowfeature
-        test_cls[ind] = int(CLASSES_DICT[item["pattern"]])
+        test_cls[ind] = int(class_dict[item["pattern"]])
         ind += 1
     confusioni_matrix = evaluation(test_data, test_cls, dec)
     print confusioni_matrix * 100
