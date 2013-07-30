@@ -7,7 +7,7 @@ def vl_coding(data, codebook):
     feature_length = codebook.shape[1]
 
     dot_product = np.dot(data, codebook.T)
-    codebook_indexes = np.argmax(dot_product)
+    codebook_indexes = np.argmax(dot_product, axis = 1)
     vlad_feature = np.zeros((1, feature_length * dictionary_size), np.float)
 
     for codebook_index in range(0, dictionary_size):
@@ -21,4 +21,5 @@ def vl_coding(data, codebook):
 
     vlad_feature.shape = 1, -1
     vlad_feature = vlad_feature / (np.linalg.norm(vlad_feature) + 1e-12)
+
     return vlad_feature
