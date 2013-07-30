@@ -3,7 +3,6 @@ __author__ = 'ShengyinWu'
 import numpy as np
 import DescriptorIO as desc
 import os
-import Image
 
 class FeatureExtractor:
     def __init__(self, image_dir, extracted_feature_dir):
@@ -33,12 +32,11 @@ class FeatureExtractor:
                 np.save(fd, keypoints)
                 np.save(fd, extrected_descriptors)
 
-if __name__ == "__main__":
-    cls = ""
-    train_feature_extractor = FeatureExtractor(os.path.join("data/images/training/{0}".format(cls)),
-                                                os.path.join("data/desc/training_desc/{0}".format(cls)))
+def main():
+    train_feature_extractor = FeatureExtractor(os.path.join("data/images/training"), os.path.join("data/desc/training_desc"))
     train_feature_extractor.do_extraction()
-
-    test_feature_extractor = FeatureExtractor(os.path.join("data/images/test/{0}".format(cls)),
-                                                os.path.join("data/desc/test_desc/{0}".format(cls)))
+    test_feature_extractor = FeatureExtractor(os.path.join("data/images/test"), os.path.join("data/desc/test_desc"))
     test_feature_extractor.do_extraction()
+
+if __name__ == "__main__":
+    main()
