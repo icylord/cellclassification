@@ -13,7 +13,7 @@ class FeatureExtractor:
         if not os.path.exists(os.path.join("data", "tmp")):
             os.makedirs(os.path.join("data", "tmp"))
 
-    def doExtraction(self):
+    def do_extraction(self):
         if not os.path.exists(self.extracted_descriptor_dir):
             os.makedirs(self.extracted_descriptor_dir)
         files_in_dir = os.listdir(self.image_dir)
@@ -32,9 +32,9 @@ class FeatureExtractor:
 
 def main():
     train_feature_extractor = FeatureExtractor(os.path.join("data/images/training"), os.path.join("data/desc/training_desc"))
-    train_feature_extractor.doExtraction()
+    train_feature_extractor.do_extraction()
     test_feature_extractor = FeatureExtractor(os.path.join("data/images/test"), os.path.join("data/desc/test_desc"))
-    test_feature_extractor.doExtraction()
+    test_feature_extractor.do_extraction()
 
 if __name__ == "__main__":
     main()

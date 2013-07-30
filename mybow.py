@@ -6,13 +6,13 @@ import Image
 
 from coding import *
 
-class BOW:
+class MyBagOfWords:
     def __init__(self, descriptor_dir, bow_dir, num_centers):
         self.descriptor_dir = descriptor_dir
         self.bow_dir = bow_dir
         self.num_centers = num_centers
 
-    def doBOW(self):
+    def do_bagofwords(self):
         if not os.path.exists(self.bow_dir):
             os.makedirs(self.bow_dir)
         fd = file(os.path.join("data", "words", "{0}.npy".format(self.num_centers)), "rb")
@@ -35,14 +35,14 @@ class BOW:
 
 def main():
     num_centers = 256
-    train_bow = BOW(
+    train_bow = MyBagOfWords(
         os.path.join("data", "desc", "training_desc"),
         os.path.join("data", "bow", "vlad_train{0}".format(num_centers)), num_centers)
-    train_bow.doBOW()
-    test_bow = BOW(
+    train_bow.do_bagofwords()
+    test_bow = MyBagOfWords(
         os.path.join("data", "desc", "test_desc"),
         os.path.join("data", "bow", "vlad_test{0}".format(num_centers)), num_centers)
-    test_bow.doBOW()
+    test_bow.do_bagofwords()
 
 if __name__ == "__main__":
     main()
