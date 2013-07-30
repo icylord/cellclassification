@@ -4,15 +4,11 @@ import numpy as np
 import os
 from hkmeans import hkmeans
 
-CLASSES_LIST=['Asterionellopsis', 'Chaetoceros', 'ciliate','Cylindrotheca', 'DactFragCeratul', 'Dactyliosolen',
-                'detritus', 'Dinobryon', 'dinoflagellate', 'Ditylum', 'Euglena',
-                'Guinardia',  'Licmophora',  'nanoflagellate',  'other_lt20',
-                'pennate', 'Phaeocystis', 'Pleurosigma', 'Pseudonitzschia',
-                'Rhizosolenia', 'Skeletonema', 'Thalassiosira']
+CLASSES_LIST=['']
 
 class PerformKmeans():
     def __init__(self, words, desc_path):
-        self.words = words
+        self.words = np.array([words], np.int32)
         self.desc_path = desc_path
 
     def load_data(self):

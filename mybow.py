@@ -12,13 +12,12 @@ class BagOfVisualWords:
         self.desc_path = desc_path
         self.bow_path = bow_path
         self.word = word
-        self.coding_and_pooling = CodingAndPooling()
 
     def do_bag_of_visual_words(self):
         if not os.path.exists(self.bow_path):
             os.makedirs(self.bow_path)
         files_in_dir = os.listdir(self.desc_path)
-        word_file = os.path.join(TOP_DIR, "data", "words", "{0}.npy".format(word))
+        word_file = os.path.join("data", "words", "[{0}].npy".format(self.word))
         fd = file(word_file, "rb")
         codebook = np.load(fd)
         fd.close()
@@ -32,10 +31,6 @@ class BagOfVisualWords:
                 fd = file(npy_file)
                 keypoints = np.load(fd)
                 data = np.load(fd)
-                png_file = os.path.join(self.png_path, f[0:-4] + ".png")
-                loaded_image = Image.open(png_file)
-                image_width = loaded_image.size[0]
-                image_height = loaded_image.size[1]
 
                 data_norm = np.sum(np.abs(data)**2, axis=-1)**(1./2) + 1e-12
                 tile_data_norm = np.tile(data_norm, (data.shape[1], 1))
@@ -46,12 +41,13 @@ class BagOfVisualWords:
 
 if __name__ == "__main__":
     word = 256
-    coding_and_pooling = CodingAndPooling()
     train_bag_of_visual_words = BagOfVisualWords(
         os.path.join("data", "images", "training"),
         os.path.join("data", "desc", "training_desc"),
         os.path.join("data", "bow", "vlad_train{0}".format(word)), word)
+    train_bag_of_visual_words.do_bag_of_visual_words()
     test_bag_of_visual_words = BagOfVisualWords(
         os.path.join("data", "images", "test"),
         os.path.join("data", "desc", "test_desc"),
         os.path.join("data", "bow", "vlad_test{0}".format(word)), word)
+    test_bag_of_visual_words.do_bag_of_visual_words()
