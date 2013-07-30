@@ -4,9 +4,7 @@ import numpy as np
 import os
 from hkmeans import hkmeans
 
-
 CLASSES_LIST=['']
-
 
 class PerformKmeans():
     def __init__(self, words, desc_path):
