@@ -5,7 +5,7 @@
 
 (3) For Hep-2 Cell Image Classification, see http://mivia.unisa.it/hep2contest/index.shtml
 
-(4) AP: 70%+-
+(4) AP: 70%+-,  PS: No.1 is 68.7%
 
 # Usage
 python runall.py
