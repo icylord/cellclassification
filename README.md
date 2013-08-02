@@ -7,7 +7,7 @@
 
 (4) AP: 70%+-,  PS: No.1 is 68.7%
 	
-	Another VQ Coding implementation: 73%+-
+Another VQ Coding implementation: 73%+-
 
 # Usage
 python runall.py
