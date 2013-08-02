@@ -1,7 +1,7 @@
 # My Bag of Words implementation
-(1) source code of my bag of words implementation.
+(1) Source code of my bag of words implementation.
 
-(2) written in python. Coding method is VLAD not VQ
+(2) Written in python. Coding method is VLAD not VQ
 
 (3) For Hep-2 Cell Image Classification, see http://mivia.unisa.it/hep2contest/index.shtml
 
@@ -11,3 +11,5 @@ Another VQ Coding implementation: 73%+-
 
 # Usage
 python runall.py
+
+Dependencies: numpy, scikit-learn
