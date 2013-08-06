@@ -4,7 +4,7 @@ import mybow as mb
 import trainandeval as te
 
 def main():
-    # #1 extract feature
+    #1 extract feature
     ef.main()
     #2 do kmeans
     mk.main()

@@ -19,7 +19,6 @@ class MyBagOfWords:
         codebook = np.load(fd)
         fd.close()
         for f in os.listdir(self.descriptor_dir):
-            print f
             if f[-1] == "y":
                 npy_file = os.path.join(self.descriptor_dir, f)
                 # may be some files broken
